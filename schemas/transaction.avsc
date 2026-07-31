@@ -1,0 +1,16 @@
+{
+  "type": "record",
+  "name": "Transaction",
+  "namespace": "com.creditrisk.aa",
+  "fields": [
+    {"name": "transaction_id",   "type": "string"},
+    {"name": "user_id",          "type": "string"},
+    {"name": "account_id",       "type": "string"},
+    {"name": "timestamp",        "type": "string"},
+    {"name": "amount",           "type": "double"},
+    {"name": "transaction_type", "type": {"type": "enum", "name": "TxnType", "symbols": ["CREDIT", "DEBIT"]}},
+    {"name": "narration",        "type": "string"},
+    {"name": "balance_after",    "type": "double"},
+    {"name": "bank_name",        "type": "string"}
+  ]
+}
