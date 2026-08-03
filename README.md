@@ -1,13 +1,5 @@
 # Financial Early Warning System (EWS)
 > **Real-Time Credit Risk & Financial Distress Anomaly Detection Platform**
-
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.5-brightgreen.svg)](https://spring.io/projects/spring-boot)
-[![Apache Kafka](https://img.shields.io/badge/Apache%20Kafka-7.4.0-red.svg)](https://kafka.apache.org/)
-[![Python](https://img.shields.io/badge/Python-3.10-blue.svg)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.100.0-009485.svg)](https://fastapi.tiangolo.com/)
-[![MLflow](https://img.shields.io/badge/MLflow-2.5.0-0194E2.svg)](https://mlflow.org/)
-[![Docker Compose](https://img.shields.io/badge/Docker%20Compose-Ready-2496ED.svg)](https://www.docker.com/)
-
 ---
 
 ## 💡 Executive Summary & Business Problem
