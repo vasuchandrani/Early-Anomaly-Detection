@@ -31,8 +31,8 @@ def compute_features(df):
         # ── Feature 3: amb_drop_percentage ───────────────────
         # 7-day avg balance vs 90-day avg balance
         latest_date = group.timestamp.max()
-        last_7  = group[group.timestamp >= latest_date - pd.Timedelta(days=7)]
-        last_90 = group[group.timestamp >= latest_date - pd.Timedelta(days=90)]
+        last_7  = group[group.timestamp >= (latest_date - pd.Timedelta("7D"))]
+        last_90 = group[group.timestamp >= (latest_date - pd.Timedelta("90D"))]
 
         amb_7  = last_7.balance_after.mean()  if len(last_7)  > 0 else 0
         amb_90 = last_90.balance_after.mean() if len(last_90) > 0 else 1

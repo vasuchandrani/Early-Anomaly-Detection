@@ -138,9 +138,9 @@ curl -X GET http://localhost:8080/anomalies
 
 ---
 
-## 📚 Project Documentation
+## 📚 Project Documentation & Quick Links
 
-For deeper technical documentation, refer to the [`docs/`](./docs) directory:
+- ⚡ [**Master Execution & Operations Guide (RUN_GUIDE.md)**](./RUN_GUIDE.md)
 - 📖 [Comprehensive File-by-File Guide](./docs/file_guide.md)
 - 🏛️ [System Architecture & Data Flow Specs](./docs/architecture.md)
 - 🚀 [Full Deployment & Operations Guide](./docs/deployment_guide.md)

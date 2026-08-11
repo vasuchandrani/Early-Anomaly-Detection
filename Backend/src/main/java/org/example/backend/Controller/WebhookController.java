@@ -1,4 +1,4 @@
-package org.example.backend.Controller;
+package org.example.backend.controller;
 
 import jakarta.validation.Valid;
 import org.example.backend.model.WebHookPayload;

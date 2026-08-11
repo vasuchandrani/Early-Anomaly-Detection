@@ -2,7 +2,7 @@ package org.example.backend.consumer;
 
 import org.example.backend.model.AnomalyEntity;
 import org.example.backend.model.AnomalyResult;
-import org.example.backend.Repository.AnomalyRepository;
+import org.example.backend.repository.AnomalyRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;

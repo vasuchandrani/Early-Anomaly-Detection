@@ -9,6 +9,7 @@ import threading
 import pandas as pd
 import numpy as np
 from datetime import datetime
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from typing import List, Optional
@@ -24,17 +25,26 @@ OUTPUT_TOPIC = os.getenv("KAFKA_OUTPUT_TOPIC", "anomalies")
 CONSUMER_GROUP = os.getenv("KAFKA_CONSUMER_GROUP", "ml-inference-group")
 MODEL_PATH = os.getenv("MODEL_PATH", "../models/pipeline.pkl")
 
-# FastAPI App
-app = FastAPI(
-    title="Financial Early Warning System - Inference Service",
-    description="Real-time ML inference service for Account Aggregator transaction streams",
-    version="1.0.0"
-)
-
 # Shared State
 model_pipeline = None
 processed_count = 0
 anomalies_detected = 0
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    load_or_train_model()
+    # Launch Kafka Consumer thread
+    thread = threading.Thread(target=kafka_consumer_loop, daemon=True)
+    thread.start()
+    yield
+
+# FastAPI App
+app = FastAPI(
+    title="Financial Early Warning System - Inference Service",
+    description="Real-time ML inference service for Account Aggregator transaction streams",
+    version="1.0.0",
+    lifespan=lifespan
+)
 
 def load_or_train_model():
     global model_pipeline
@@ -82,8 +92,8 @@ def compute_features_from_payload(user_id: str, transactions: list) -> pd.DataFr
     emi_to_income_ratio = total_emi / monthly_income if monthly_income > 0 else 0.0
 
     latest_date = df["timestamp"].max()
-    last_7 = df[df["timestamp"] >= latest_date - pd.Timedelta(days=7)]
-    last_90 = df[df["timestamp"] >= latest_date - pd.Timedelta(days=90)]
+    last_7 = df[df["timestamp"] >= (latest_date - pd.Timedelta("7D"))]
+    last_90 = df[df["timestamp"] >= (latest_date - pd.Timedelta("90D"))]
 
     amb_7 = last_7["balanceAfter"].mean() if "balanceAfter" in last_7.columns and not last_7.empty else (last_7["balance_after"].mean() if "balance_after" in last_7.columns and not last_7.empty else 0.0)
     amb_90 = last_90["balanceAfter"].mean() if "balanceAfter" in last_90.columns and not last_90.empty else (last_90["balance_after"].mean() if "balance_after" in last_90.columns and not last_90.empty else 1.0)
@@ -220,13 +230,6 @@ class PredictRequest(BaseModel):
     fetchTimestamp: str
     bankName: str
     transactions: List[TransactionItem]
-
-@app.on_event("startup")
-def startup_event():
-    load_or_train_model()
-    # Launch Kafka Consumer thread
-    thread = threading.Thread(target=kafka_consumer_loop, daemon=True)
-    thread.start()
 
 @app.get("/health")
 def health():
